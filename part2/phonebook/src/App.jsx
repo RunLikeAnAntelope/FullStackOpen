@@ -1,46 +1,7 @@
 import { useState } from 'react'
-const Person = ({ person }) => {
-  return (
-    <div>{person.name} {person.number}</div>
-  )
-}
-
-const Persons = ({ persons }) => {
-  return (
-    persons.map(person => <Person key={person.name} person={person} />)
-  )
-}
-
-const SearchedPersons = ({ persons, search }) => {
-  const lSearch = search.toLowerCase()
-  return (
-    <Persons persons={persons.filter(person =>
-      person.name.toLowerCase().includes(lSearch))}
-    />
-  )
-}
-
-const Filter = ({ search, onChange }) => {
-  return (
-    <div>
-      filter shown with<input name="pbfilter" value={search} onChange={onChange} />
-    </div>
-  )
-}
-
-const PersonForm = ({ onSubmit, newName, onNameChange, newNumber, onNumberChange }) => {
-  <form onSubmit={onSubmit}>
-    <div>
-      name: <input name="pbname" value={newName} onChange={onNameChange} />
-    </div>
-    <div>
-      number: <input name="pbnumber" value={newNumber} onChange={onNumberChange} />
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-  </form>
-}
+import Filter from "./components/Filter"
+import PersonForm from './components/PersonForm'
+import SearchedPersons from './components/SearchedPersons'
 
 const App = () => {
   const init = [
@@ -75,6 +36,7 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber }
       setPersons(persons.concat(newPerson))
       setNewName("")
+      setNewNumber("")
     }
   }
 
