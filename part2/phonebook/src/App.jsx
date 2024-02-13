@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import axios from "axios"
 import Filter from "./components/Filter"
 import PersonForm from './components/PersonForm'
 import SearchedPersons from './components/SearchedPersons'
+import personService from './services/persons'
 
 
 const App = () => {
 
+  // state variables
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
@@ -15,10 +16,10 @@ const App = () => {
   useEffect(
     //first argument
     () => {
-      axios
-        .get('http://localhost:3001/persons')
+      personService
+        .getAll()
         .then(response => {
-          setPersons(response.data)
+          setPersons(response)
         })
     },
     //second argument. Tells use effect only run on first render
@@ -43,7 +44,9 @@ const App = () => {
       alert(`${newName} is already in the phonebook`)
     } else {
       const newPerson = { name: newName, number: newNumber }
-      setPersons(persons.concat(newPerson))
+      personService
+      .create(newPerson)
+      .then(response => setPersons(persons.concat(response)))
       setNewName("")
       setNewNumber("")
     }
