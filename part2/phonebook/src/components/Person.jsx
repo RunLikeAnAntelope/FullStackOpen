@@ -1,9 +1,10 @@
+import personService from "../services/persons"
 const Person = ({ person }) => {
   return (
     <div>
       {person.name}
       {person.number}
-      <button>delete</button>
+      <button onClick={()=>personService.remove(person.id)}>delete</button>
     </div>
   )
 }
