@@ -38,18 +38,35 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const setSetPersons = (newPersons) => {
+    setPersons(newPersons)
+  }
+
+  const editNumber = () => {
+    const confirm = window.confirm(`${newName} is already in the phonebook. Replace the old number with a new one?`)
+    if (confirm) {
+      const person = persons.find(n => n.name === newName)
+      const changedPerson = { ...person, number: newNumber }
+      personService
+        .update(person.id, changedPerson)
+        .then(response => {
+          setPersons(persons.map(p => p.id === response.id ? response : p))
+        })
+    }
+  }
+
   const addEntry = (event) => {
     event.preventDefault()
     if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already in the phonebook`)
+      editNumber()
     } else {
       const newPerson = { name: newName, number: newNumber }
       personService
-      .create(newPerson)
-      .then(response => setPersons(persons.concat(response)))
-      setNewName("")
-      setNewNumber("")
+        .create(newPerson)
+        .then(response => setPersons(persons.concat(response)))
     }
+    setNewName("")
+    setNewNumber("")
   }
 
   return (
@@ -62,19 +79,8 @@ const App = () => {
         onNameChange={handleNameChange}
         newNumber={newNumber}
         onNumberChange={handleNumberChange} />
-      <form onSubmit={addEntry}>
-        <div>
-          name: <input name="pbname" value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input name="pbnumber" value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
       <h2>Numbers</h2>
-      <SearchedPersons persons={persons} search={search} />
+      <SearchedPersons persons={persons} search={search} setNewPersons={setSetPersons} />
     </div>
   )
 }

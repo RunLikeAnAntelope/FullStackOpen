@@ -1,9 +1,11 @@
 import Persons from "./Persons"
-const SearchedPersons = ({ persons, search }) => {
+const SearchedPersons = ({ persons, search, setNewPersons }) => {
   const lSearch = search.toLowerCase()
   return (
-    <Persons persons={persons.filter(person =>
-      person.name.toLowerCase().includes(lSearch))}
+    <Persons
+      persons={persons.filter(person =>
+        person.name.toLowerCase().includes(lSearch))}
+      setNewPersons={setNewPersons}
     />
   )
 }
