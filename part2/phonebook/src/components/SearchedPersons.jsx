@@ -1,5 +1,5 @@
 import Persons from "./Persons"
-const SearchedPersons = ({ persons, search, setNewPersons }) => {
+const SearchedPersons = ({ persons, search, setNewPersons}) => {
   const lSearch = search.toLowerCase()
   return (
     <Persons

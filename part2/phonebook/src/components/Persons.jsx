@@ -1,5 +1,5 @@
 import Person from "./Person"
-const Persons = ({ persons, setNewPersons }) => {
+const Persons = ({ persons, setNewPersons}) => {
   return (
     persons.map(person =>
       <Person

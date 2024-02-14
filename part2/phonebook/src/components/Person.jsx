@@ -1,5 +1,5 @@
 import personService from "../services/persons"
-const Person = ({ person, setNewPersons, persons }) => {
+const Person = ({ person, setNewPersons, persons}) => {
   const onClick = () => {
     if (window.confirm(`Are you sure you want to delete ${person.name}?`)) {
       personService

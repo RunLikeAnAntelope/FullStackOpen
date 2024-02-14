@@ -4,6 +4,47 @@ import PersonForm from './components/PersonForm'
 import SearchedPersons from './components/SearchedPersons'
 import personService from './services/persons'
 
+const SuccessMessage = ({ message }) => {
+  const style = {
+    color: "green",
+    backround: "lightgrey",
+    borderStyle: "solid",
+    borderRadius: 5,
+    padding: 10
+
+  }
+  if (message !== undefined) {
+    return (
+      <h2 style={style}>
+        {message}
+      </h2>
+    )
+  } else {
+    return undefined
+  }
+
+}
+
+const ErrorMessage = ({ message }) => {
+  const style = {
+    color: "red",
+    backround: "lightgrey",
+    borderStyle: "solid",
+    borderRadius: 5,
+    padding: 10
+
+  }
+  if (message !== undefined) {
+    return (
+      <h2 style={style}>
+        {message}
+      </h2>
+    )
+  } else {
+    return undefined
+  }
+
+}
 
 const App = () => {
 
@@ -12,6 +53,8 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [search, setSearch] = useState("")
+  const [successMessage, setSuccessMessage] = useState(undefined)
+  const [errorMessage, setErrorMessage] = useState(undefined)
 
   useEffect(
     //first argument
@@ -51,7 +94,23 @@ const App = () => {
         .update(person.id, changedPerson)
         .then(response => {
           setPersons(persons.map(p => p.id === response.id ? response : p))
+          setSuccessMessage(
+            `Updated ${response.name}`
+          )
+          setTimeout(() => {
+            setSuccessMessage(undefined)
+          }, 5000)
         })
+        .catch( () => {
+          setPersons(persons.filter(n => n.id !== person.id))
+          setErrorMessage(
+            `Information of ${person.name} has already been removed from the server`
+          )
+          setTimeout(() => {
+            setErrorMessage(undefined)
+          }, 5000)
+        })
+
     }
   }
 
@@ -63,7 +122,15 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber }
       personService
         .create(newPerson)
-        .then(response => setPersons(persons.concat(response)))
+        .then(response => {
+          setPersons(persons.concat(response))
+          setSuccessMessage(
+            `Added ${response.name}`
+          )
+          setTimeout(() => {
+            setSuccessMessage(undefined)
+          }, 5000)
+        })
     }
     setNewName("")
     setNewNumber("")
@@ -72,6 +139,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessMessage message={successMessage} />
+      <ErrorMessage message={errorMessage} />
       <Filter search={search} onChange={handleSearchChange} />
       <PersonForm
         onSubmit={addEntry}
