@@ -65,7 +65,7 @@ const App = () => {
           setPersons(response)
         })
     },
-    //second argument. Tells use effect only run on first render
+    //second argument. Tells use effect to only run on first render
     []
   )
 
