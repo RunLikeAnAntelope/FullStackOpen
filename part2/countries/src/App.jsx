@@ -18,6 +18,7 @@ const ShowCountryDetails = ({ countryName }) => {
         <p>area {details.area}</p>
         <h2>languages:</h2>
         {Object.values(details.languages).map(l => <p key={l}>{l}</p>)}
+        <img src={details.flags.png}/>
       </>
     )
   } else {
