@@ -9,7 +9,6 @@ const ShowCountryDetails = ({ countryName }) => {
 
   useEffect(() => {
     if (details) {
-      console.log("what is going on");
       axios
         .get(`https://api.openweathermap.org/data/2.5/weather?q=${details.capital}&appid=${api_key}`)
         .then(response => setWeather(response.data))
@@ -17,7 +16,6 @@ const ShowCountryDetails = ({ countryName }) => {
   }, [countryName, details])
 
   useEffect(() => {
-    console.log("api");
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${countryName}`)
       .then(response => setDetails(response.data))
@@ -36,7 +34,7 @@ const ShowCountryDetails = ({ countryName }) => {
         <img src={details.flags.png} />
         <h2>Weather in {details.capital}</h2>
         <p>temperature {(weather.main.temp - 273).toFixed(2)} Celcius</p>
-        <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}/>
+        <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} />
         <p>wind {weather.wind.speed}m/s</p>
       </>
     )
@@ -84,7 +82,7 @@ const ShowCountries = ({ countries }) => {
 function App() {
   const [countries, setCountries] = useState(undefined)
   const [searchText, setSearchText] = useState("")
-  const [searchedCountries, setSearchedCountries] = useState(undefined)
+  //const [searchedCountries, setSearchedCountries] = useState(undefined)
 
   useEffect(() => {
     axios
@@ -94,11 +92,9 @@ function App() {
       })
   }, [])
 
-  useEffect(() => {
-    if (countries) {
-      setSearchedCountries(countries.filter(c => c.toUpperCase().includes(searchText.toUpperCase())))
-    }
-  }, [searchText, countries])
+  if (countries) {
+    var searchedCountries = countries.filter(c => c.toUpperCase().includes(searchText.toUpperCase()))
+  }
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value)
