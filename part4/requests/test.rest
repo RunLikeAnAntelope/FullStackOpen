@@ -1,0 +1,16 @@
+###
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+content-type: application/json
+
+{
+   "title": "John kDpppoe",
+    "author": "555-555-5555",
+    "url": "iamher.com",
+    "likes": "12"
+}
+
+###
+GET http://localhost:3001/api/blogs
+
+###
+DELETE http://localhost:3001/api/persons/65d930ccd64ab4be9fc71332
