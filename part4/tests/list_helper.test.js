@@ -92,17 +92,17 @@ describe("list_helper tests", () => {
   describe("favorite blogs tests", () => {
 
     test("with one blog in list, equals that one", () => {
-      const result = listHelper.mostLikes(listWithOneBlog)
+      const result = listHelper.favoriteBlog(listWithOneBlog)
       assert.deepStrictEqual(result, listWithOneBlog[0])
     })
 
     test("with multiple blogs in list", () => {
-      const result = listHelper.mostLikes(blogs)
+      const result = listHelper.favoriteBlog(blogs)
       assert.deepStrictEqual(result, blogs[2])
     })
 
     test("with empty blogs list", () => {
-      const result = listHelper.mostLikes([])
+      const result = listHelper.favoriteBlog([])
       assert.deepStrictEqual(result, undefined)
     })
   })
@@ -124,6 +124,7 @@ describe("list_helper tests", () => {
       assert.deepStrictEqual(result, undefined)
     })
   })
+  
   describe("author with most blogs lodash", () => {
 
     test("with one blog in list, equals that one", () => {
@@ -138,6 +139,24 @@ describe("list_helper tests", () => {
 
     test("with empty blogs list", () => {
       const result = listHelper.mostBlogsLodash([])
+      assert.deepStrictEqual(result, undefined)
+    })
+  })
+
+  describe("author with most likes", () => {
+
+    test("with one blog in list, equals that one", () => {
+      const result = listHelper.mostLikes(listWithOneBlog)
+      assert.deepStrictEqual(result, { author: listWithOneBlog[0].author, likes: listWithOneBlog[0].likes })
+    })
+
+    test("with multiple blogs in list", () => {
+      const result = listHelper.mostLikes(blogs)
+      assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", likes: 17})
+    })
+
+    test("with empty blogs list", () => {
+      const result = listHelper.mostLikes([])
       assert.deepStrictEqual(result, undefined)
     })
   })

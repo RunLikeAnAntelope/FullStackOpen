@@ -12,7 +12,7 @@ const totalLikes = (blogs) => {
   return totalLikes
 }
 
-const mostLikes = (blogs) => {
+const favoriteBlog = (blogs) => {
   if (blogs.length === 0) {
     return undefined
   }
@@ -58,7 +58,7 @@ const mostBlogs = (blogs) => {
 }
 
 const mostBlogsLodash = (blogs) => {
-  if(blogs.length === 0) {
+  if (blogs.length === 0) {
     return undefined
   }
   authorBlogCount = lodash.countBy(blogs, "author")
@@ -71,14 +71,43 @@ const mostBlogsLodash = (blogs) => {
       )
     })
 
-    return ({author: authorWithMostBlogs[0], blogs: authorWithMostBlogs[1]})
+  return ({ author: authorWithMostBlogs[0], blogs: authorWithMostBlogs[1] })
+}
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  // group by author
+  blogsByAuthor = lodash.groupBy(blogs, "author")
+
+  // get number of likes for each author
+  likesByAuthor = Object.entries(blogsByAuthor).map(authorBlogsList => {
+    const numLikes = authorBlogsList[1].reduce(
+      (totalLikes, blog) => totalLikes + blog.likes, 0)
+    return { author: authorBlogsList[0], likes: numLikes }
+  })
+
+  // most liked author
+  mostLikedAuthor = likesByAuthor.reduce(
+    (mostLikesAuthor, author) => {
+      return (
+        mostLikesAuthor.likes < author.likes
+          ? author
+          : mostLikesAuthor
+      )
+    }
+  )
+
+  return mostLikedAuthor
 }
 
 module.exports = {
   dummy,
   totalLikes,
-  mostLikes,
+  favoriteBlog: favoriteBlog,
   mostBlogs,
-  mostBlogsLodash
+  mostBlogsLodash,
+  mostLikes
 }
