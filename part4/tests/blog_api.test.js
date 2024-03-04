@@ -8,6 +8,13 @@ const Blog = require("../models/blog")
 
 const api = supertest(app)
 
+const testBlog = {
+  author: "Test Author",
+  title: "Test Title",
+  url: "www.hello.com",
+  likes: 13
+}
+
 beforeEach(async () => {
   await Blog.deleteMany({})
   const blogObjects = testHelper.blogs.map(blog => new Blog(blog))
@@ -34,6 +41,33 @@ test("_id gets renamed to id", async () => {
   const result = await api.get("/api/blogs")
   assert.strictEqual(Object.keys(result.body[0]).includes("id"), true)
   assert.strictEqual(Object.keys(result.body[0]).includes("_id"), false)
+})
+
+test("adding blog works", async () => {
+  await api
+    .post("/api/blogs")
+    .send(testBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+  assert.strictEqual(response.body.length, testHelper.blogs.length + 1)
+
+  const titles = response.body.map(blog => blog.title)
+  assert(titles.includes(testBlog.title))
+})
+
+test("blog likes default to 0 if missing from request", async () => {
+  let blogWithNoLikes = { ...testBlog }
+  delete blogWithNoLikes.likes
+
+  await api
+    .post("/api/blogs")
+    .send(blogWithNoLikes)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  //Todo: Finish this test 
 })
 
 after(async () => {
