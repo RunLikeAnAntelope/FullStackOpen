@@ -50,14 +50,14 @@ test("adding blog works", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
-  const response = await api.get("/api/blogs")
-  assert.strictEqual(response.body.length, testHelper.blogs.length + 1)
+  const result = await api.get("/api/blogs")
+  assert.strictEqual(result.body.length, testHelper.blogs.length + 1)
 
-  const titles = response.body.map(blog => blog.title)
+  const titles = result.body.map(blog => blog.title)
   assert(titles.includes(testBlog.title))
 })
 
-test("blog likes default to 0 if missing from request", async () => {
+test.only("blog likes default to 0 if missing from request", async () => {
   let blogWithNoLikes = { ...testBlog }
   delete blogWithNoLikes.likes
 
@@ -67,7 +67,11 @@ test("blog likes default to 0 if missing from request", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
-  //Todo: Finish this test 
+  const result = await api.get("/api/blogs")
+
+  const retBlogWithNoLikes = result.body.find(blog => blog.title = blogWithNoLikes.title)
+  console.log(retBlogWithNoLikes)
+  assert.strictEqual(retBlogWithNoLikes.likes, 0)
 })
 
 after(async () => {
