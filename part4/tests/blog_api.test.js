@@ -69,8 +69,8 @@ test.only("blog likes default to 0 if missing from request", async () => {
 
   const result = await api.get("/api/blogs")
 
-  const retBlogWithNoLikes = result.body.find(blog => blog.title = blogWithNoLikes.title)
-  console.log(retBlogWithNoLikes)
+  const retBlogWithNoLikes = result.body.find(blog => blog.title === blogWithNoLikes.title)
+  // console.log(retBlogWithNoLikes)
   assert.strictEqual(retBlogWithNoLikes.likes, 0)
 })
 
