@@ -74,8 +74,8 @@ test("blog likes default to 0 if missing from request", async () => {
   assert.strictEqual(retBlogWithNoLikes.likes, 0)
 })
 
-describe.only("Creation of new blogs", () => {
-  test.only("title missing", async () => {
+describe("Creation of new blogs", () => {
+  test("title missing", async () => {
     let blogWithNoTitle = { ...testBlog }
     delete blogWithNoTitle.title
 
@@ -85,7 +85,7 @@ describe.only("Creation of new blogs", () => {
       .expect(400)
   })
 
-  test.only("url missing", async () => {
+  test("url missing", async () => {
     let blogWithNoUrl = { ...testBlog }
     delete blogWithNoUrl.title
 
@@ -97,6 +97,34 @@ describe.only("Creation of new blogs", () => {
 
 })
 
+describe("Deletion of blogs", () => {
+  test("Test Deletion", async () => {
+    await api
+      .delete(`/api/blogs/${testHelper.blogs[0]._id}`)
+      .expect(204)
+
+    const returnedBlogs = await api.get("/api/blogs")
+    assert(returnedBlogs.body.length === testHelper.blogs.length - 1)
+    const deletedBlogFound = returnedBlogs.body.find(blog => blog.id === testHelper.blogs[0]._id)
+    assert(deletedBlogFound === undefined)
+  })
+})
+
+describe("Modifying a blog", () => {
+  test("Test modification", async () => {
+    await api
+      .put(`/api/blogs/${testHelper.blogs[0]._id}`)
+      .send(testBlog)
+      .expect(200)
+      .expect("Content-Type", /application\/json/)
+
+    const returnedBlogs = await api.get("/api/blogs")
+    const modifiedBlog = returnedBlogs.body.find(blog => blog.id === testHelper.blogs[0]._id)
+    delete modifiedBlog.id
+    delete modifiedBlog.__v
+    assert.deepStrictEqual(modifiedBlog, testBlog)
+  })
+})
 after(async () => {
   await mongoose.connection.close()
 })
