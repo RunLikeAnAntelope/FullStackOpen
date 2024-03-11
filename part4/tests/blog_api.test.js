@@ -57,7 +57,7 @@ test("adding blog works", async () => {
   assert(titles.includes(testBlog.title))
 })
 
-test.only("blog likes default to 0 if missing from request", async () => {
+test("blog likes default to 0 if missing from request", async () => {
   let blogWithNoLikes = { ...testBlog }
   delete blogWithNoLikes.likes
 
@@ -72,6 +72,29 @@ test.only("blog likes default to 0 if missing from request", async () => {
   const retBlogWithNoLikes = result.body.find(blog => blog.title === blogWithNoLikes.title)
   // console.log(retBlogWithNoLikes)
   assert.strictEqual(retBlogWithNoLikes.likes, 0)
+})
+
+describe.only("Creation of new blogs", () => {
+  test.only("title missing", async () => {
+    let blogWithNoTitle = { ...testBlog }
+    delete blogWithNoTitle.title
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithNoTitle)
+      .expect(400)
+  })
+
+  test.only("url missing", async () => {
+    let blogWithNoUrl = { ...testBlog }
+    delete blogWithNoUrl.title
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithNoUrl)
+      .expect(400)
+  })
+
 })
 
 after(async () => {
