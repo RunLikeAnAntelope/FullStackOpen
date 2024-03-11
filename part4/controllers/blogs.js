@@ -12,7 +12,9 @@ blogsRouter.post('/', async (request, response) => {
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog)
   } else {
-    response.status(400)
+    response.status(400).json({
+      error: "name is missing"
+    })
   }
 })
 
